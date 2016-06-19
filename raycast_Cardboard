@@ -1,0 +1,34 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
+
+[RequireComponent(typeof(Collider))]
+public class Teleport : MonoBehaviour
+{
+    private Vector3 startingPosition;
+    private float a;
+    private CardboardHead head;
+    private float delay = 0.0f;
+    public string level;
+
+    void Start()
+    {
+        //initialize
+        SetGazedAt(false);
+        head = Camera.main.GetComponent<StereoController>().Head;
+        startingPosition = transform.localPosition;
+    }
+    void Update()
+    {
+        //see if looked at and load another scene
+        RaycastHit hit;
+        bool isLookedAt = GetComponent<Collider>().Raycast(head.Gaze, out hit, Mathf.Infinity);
+        GetComponent<Renderer>().material.color = isLookedAt ? Color.green : Color.red;
+        if (!isLookedAt) { delay = Time.time + 2.0f; }
+        if (isLookedAt && Time.time > delay)
+        {
+         
+            SceneManager.LoadScene(level);
+
+        }
+    }
