@@ -1,0 +1,50 @@
+public class Selector : MonoBehaviour {
+
+    public Text TargetText;
+    public SelectorBehave Select;
+    SelectorBehave newSelector;
+    Clickable thisclicked;
+    GameObject[] allShelves;
+    GameObject clickedSHelf;
+
+    public void ButtonHandle(int direction)
+    {
+        
+        //do interactions
+        if (direction == 0)
+        {
+            Select.IndexOfProduct--;
+        }
+        else
+        {
+            Select.IndexOfProduct++;
+        }
+        TargetText.text = Select.productNames[Select.IndexOfProduct];
+        addToShelf();
+       
+    }
+
+    void addToShelf()
+    {
+        GameObject[] allShelves = GameObject.FindGameObjectsWithTag("Shelve");
+        //find clicked shelf
+        for (int i = 0; i < allShelves.Length; i++)
+        {
+            if (allShelves[i].GetComponentInChildren<Clickable>().clicked == 1)
+            {
+                clickedSHelf = allShelves[i];
+            }
+        }
+        
+        //change attributes on clicked shelf
+        //find product shelf
+        newSelector = GameObject.Find("Canvas/PanelProduct/Selector/GameObject").GetComponent<SelectorBehave>();
+        clickedSHelf.GetComponentInChildren<Clickable>().product = newSelector.productNames[newSelector.IndexOfProduct];
+        //find shelf set
+        newSelector = GameObject.Find("Canvas/PanelShelf/Selector/GameObject").GetComponent<SelectorBehave>();
+        clickedSHelf.GetComponentInChildren<Clickable>().topS = newSelector.productNames[newSelector.IndexOfProduct];
+        newSelector = GameObject.Find("Canvas/PanelShelf/Selector (1)/GameObject").GetComponent<SelectorBehave>();
+        clickedSHelf.GetComponentInChildren<Clickable>().middleS = newSelector.productNames[newSelector.IndexOfProduct];
+        newSelector = GameObject.Find("Canvas/PanelShelf/Selector (2)/GameObject").GetComponent<SelectorBehave>();
+        clickedSHelf.GetComponentInChildren<Clickable>().bottomS = newSelector.productNames[newSelector.IndexOfProduct];
+    }
